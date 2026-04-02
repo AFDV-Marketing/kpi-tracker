@@ -19,11 +19,16 @@
             <span class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-sm font-bold text-black">1</span>
             <h2 class="text-base font-semibold text-white">Who are you?</h2>
         </div>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-3">
             <button onclick="selectUser('mariam')" class="user-btn glass p-5 text-left hover:border-amber-500/40 transition cursor-pointer group" data-user="mariam">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm mb-3">MG</div>
                 <p class="font-semibold text-white group-hover:text-amber-400 transition">Mariam G.</p>
                 <p class="text-xs text-slate-500 mt-0.5">Account Manager</p>
+            </button>
+            <button onclick="selectUser('jessie')" class="user-btn glass p-5 text-left hover:border-amber-500/40 transition cursor-pointer group" data-user="jessie">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm mb-3">JL</div>
+                <p class="font-semibold text-white group-hover:text-amber-400 transition">Jessie L.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Digital Marketing</p>
             </button>
             <button onclick="selectUser('alioune')" class="user-btn glass p-5 text-left hover:border-amber-500/40 transition cursor-pointer group" data-user="alioune">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-black font-bold text-sm mb-3">AF</div>
@@ -140,6 +145,10 @@
         mariam: {
             id: "e3aefd9d844c81615ffaee0f03a866b2.access",
             secret: "0ef799604ce67b023801dd736eb9018bb89307ee0b31022a5e95b8e643127053"
+        },
+        jessie: {
+            id: "c4ccca4a1804545e865c3b8e6205143b.access",
+            secret: "f18120b425e51fe4ece6f20522858624f3665cfaa98b8400d61f6da6c72d9028"
         },
         alioune: { id: "local", secret: "local" }
     };
