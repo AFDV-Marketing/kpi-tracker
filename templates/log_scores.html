@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Log {{ period|capitalize }} Scores — {{ staff.name }}{% endblock %}
+
+{% block nav_extra %}
+<a href="/scorecard/{{ staff.id }}" class="text-slate-400 hover:text-white no-underline">{{ staff.name }}</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-white">Log {{ period|capitalize }} Scores</h1>
+        <p class="text-slate-400">{{ staff.name }} — {{ period_start }} to {{ period_end }}</p>
+    </div>
+
+    <form method="POST" action="/log/{{ staff.id }}">
+        <input type="hidden" name="period_start" value="{{ period_start }}">
+        <input type="hidden" name="period_end" value="{{ period_end }}">
+
+        {% for kpi in kpis %}
+        {% set ex = existing.get(kpi.id) %}
+        <div class="card mb-4 p-5">
+            <div class="flex items-start justify-between mb-3">
+                <div>
+                    <h3 class="text-base font-semibold text-white">{{ kpi.name }}</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">{{ kpi.description }}</p>
+                </div>
+                <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-400">{{ kpi.category|upper }}</span>
+            </div>
+
+            <!-- Thresholds reference -->
+            <div class="grid grid-cols-3 gap-2 mb-4 text-xs">
+                <div class="p-2 rounded bg-emerald-900/30 border border-emerald-800/50">
+                    <span class="text-emerald-400 font-medium">GREEN:</span> {{ kpi.green_threshold }}
+                </div>
+                <div class="p-2 rounded bg-amber-900/30 border border-amber-800/50">
+                    <span class="text-amber-400 font-medium">YELLOW:</span> {{ kpi.yellow_threshold }}
+                </div>
+                <div class="p-2 rounded bg-red-900/30 border border-red-800/50">
+                    <span class="text-red-400 font-medium">RED:</span> {{ kpi.red_threshold }}
+                </div>
+            </div>
+
+            <!-- Score selector -->
+            <div class="flex gap-2 mb-3">
+                {% for s in ['green', 'yellow', 'red', 'na'] %}
+                <label class="flex-1 cursor-pointer">
+                    <input type="radio" name="score_{{ kpi.id }}" value="{{ s }}" class="sr-only peer"
+                           {% if ex and ex.score == s %}checked{% elif not ex and s == 'na' %}checked{% endif %}>
+                    <div class="text-center py-2 rounded-lg border-2 border-transparent peer-checked:border-white/50 transition
+                        {% if s == 'green' %}score-green{% elif s == 'yellow' %}score-yellow{% elif s == 'red' %}score-red{% else %}score-na{% endif %}">
+                        <span class="text-sm font-bold">{{ s|upper }}</span>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+
+            <!-- Value + Notes -->
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="text-xs text-slate-500">Value (optional)</label>
+                    <input type="text" name="value_{{ kpi.id }}" value="{{ ex.value if ex else '' }}"
+                           placeholder="e.g. 3 posts, 95%, 2 logins" class="w-full mt-1 px-3 py-2 rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-500">Notes (optional)</label>
+                    <input type="text" name="notes_{{ kpi.id }}" value="{{ ex.notes if ex else '' }}"
+                           placeholder="Context, observations..." class="w-full mt-1 px-3 py-2 rounded-lg text-sm">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="flex items-center gap-3 mt-6">
+            <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium text-sm">Save Scores</button>
+            <a href="/scorecard/{{ staff.id }}" class="px-4 py-2.5 text-slate-400 hover:text-white text-sm no-underline">Cancel</a>
+            {% if period == 'weekly' %}
+            <a href="/log/{{ staff.id }}?period=monthly" class="ml-auto text-xs text-slate-500 hover:text-white no-underline">Switch to Monthly &rarr;</a>
+            {% else %}
+            <a href="/log/{{ staff.id }}?period=weekly" class="ml-auto text-xs text-slate-500 hover:text-white no-underline">&larr; Switch to Weekly</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

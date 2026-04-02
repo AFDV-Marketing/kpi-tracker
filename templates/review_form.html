@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}New {{ review_type|title }} Review — {{ staff.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-white">{{ review_type|title }} Review</h1>
+        <p class="text-slate-400">{{ staff.name }} — {{ period_label }}</p>
+    </div>
+
+    <form method="POST" action="/review/{{ staff.id }}">
+        <input type="hidden" name="review_type" value="{{ review_type }}">
+        <input type="hidden" name="period_label" value="{{ period_label }}">
+
+        <div class="card p-5 mb-4">
+            <label class="text-sm font-medium text-slate-300 block mb-2">Summary</label>
+            <textarea name="summary" rows="3" placeholder="What happened this period? Key observations..." class="w-full px-3 py-2 rounded-lg text-sm"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="card p-5">
+                <label class="text-sm font-medium text-emerald-400 block mb-2">Strengths</label>
+                <textarea name="strengths" rows="3" placeholder="What went well..." class="w-full px-3 py-2 rounded-lg text-sm"></textarea>
+            </div>
+            <div class="card p-5">
+                <label class="text-sm font-medium text-amber-400 block mb-2">Concerns</label>
+                <textarea name="concerns" rows="3" placeholder="What needs attention..." class="w-full px-3 py-2 rounded-lg text-sm"></textarea>
+            </div>
+        </div>
+
+        <div class="card p-5 mb-4">
+            <label class="text-sm font-medium text-blue-400 block mb-2">Action Items</label>
+            <textarea name="action_items" rows="3" placeholder="Specific next steps..." class="w-full px-3 py-2 rounded-lg text-sm"></textarea>
+        </div>
+
+        <div class="card p-5 mb-6">
+            <label class="text-sm font-medium text-slate-300 block mb-2">Overall Grade</label>
+            <div class="flex gap-2">
+                {% for grade in ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F'] %}
+                <label class="cursor-pointer">
+                    <input type="radio" name="overall_grade" value="{{ grade }}" class="sr-only peer">
+                    <div class="px-3 py-1.5 rounded-lg text-sm font-bold border-2 border-transparent peer-checked:border-white/50 transition
+                        {% if grade.startswith('A') or grade == 'B+' or grade == 'B' %}score-green
+                        {% elif grade.startswith('B') or grade == 'C+' or grade == 'C' %}score-yellow
+                        {% else %}score-red{% endif %}">{{ grade }}</div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium text-sm">Save Review</button>
+            <a href="/scorecard/{{ staff.id }}" class="px-4 py-2.5 text-slate-400 hover:text-white text-sm no-underline">Cancel</a>
+            <div class="ml-auto flex gap-2">
+                {% for rt in ['weekly', 'monthly', 'quarterly'] %}
+                <a href="/review/{{ staff.id }}/new?review_type={{ rt }}" class="text-xs px-2 py-1 rounded {% if rt == review_type %}bg-slate-600 text-white{% else %}text-slate-500 hover:text-white{% endif %} no-underline">{{ rt|title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

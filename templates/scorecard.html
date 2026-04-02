@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}{{ staff.name }} Scorecard{% endblock %}
+
+{% block nav_extra %}
+<a href="/scorecard/{{ staff.id }}" class="text-white font-medium no-underline">{{ staff.name }}</a>
+{% endblock %}
+
+{% block content %}
+<!-- Staff Header -->
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <h1 class="text-2xl font-bold text-white">{{ staff.name }}</h1>
+        <p class="text-slate-400">{{ staff.role }} | {{ staff.email }} | ${{ "%.0f"|format(staff.rate) }}/hr | Since {{ staff.start_date }}</p>
+    </div>
+    <div class="flex items-center gap-3">
+        <a href="/log/{{ staff.id }}?period=weekly" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg no-underline text-sm font-medium">Log Weekly</a>
+        <a href="/log/{{ staff.id }}?period=monthly" class="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg no-underline text-sm font-medium">Log Monthly</a>
+        <a href="/review/{{ staff.id }}/new?review_type=weekly" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg no-underline text-sm font-medium">Write Review</a>
+    </div>
+</div>
+
+<!-- KPIs with History -->
+<div class="grid grid-cols-1 gap-4 mb-8">
+    <h2 class="text-xs uppercase tracking-wider text-slate-500">Lead Measures (Weekly)</h2>
+    {% for sk in kpis %}
+    {% if sk.kpi.category == 'lead' %}
+    <div class="card p-5">
+        <div class="flex items-center justify-between mb-2">
+            <div>
+                <h3 class="text-base font-semibold text-white">{{ sk.kpi.name }}</h3>
+                <p class="text-xs text-slate-500">{{ sk.kpi.description }}</p>
+            </div>
+            {% if sk.score %}
+            <span class="px-3 py-1 rounded-full text-sm font-bold score-{{ sk.score.score }}">{{ sk.score.score|upper }}</span>
+            {% else %}
+            <span class="px-3 py-1 rounded-full text-sm font-bold score-na">NOT SCORED</span>
+            {% endif %}
+        </div>
+
+        <!-- Thresholds -->
+        <div class="flex gap-4 text-xs text-slate-500 mb-3">
+            <span><span class="text-emerald-500">G:</span> {{ sk.kpi.green_threshold }}</span>
+            <span><span class="text-amber-500">Y:</span> {{ sk.kpi.yellow_threshold }}</span>
+            <span><span class="text-red-500">R:</span> {{ sk.kpi.red_threshold }}</span>
+        </div>
+
+        {% if sk.score and sk.score.notes %}
+        <p class="text-sm text-slate-400 mb-3">{{ sk.score.notes }}</p>
+        {% endif %}
+
+        <!-- History dots -->
+        {% if sk.history %}
+        <div class="flex items-center gap-1.5">
+            <span class="text-xs text-slate-600 mr-2">History:</span>
+            {% for h in sk.history %}
+            <div class="w-5 h-5 rounded dot-{{ h.score }} flex items-center justify-center" title="{{ h.period_start }}: {{ h.score|upper }}{% if h.notes %} — {{ h.notes }}{% endif %}">
+                <span class="text-[8px] font-bold text-white/80">{{ h.period_start[8:10] }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <h2 class="text-xs uppercase tracking-wider text-slate-500 mt-4">Lag Measures (Monthly)</h2>
+    {% for sk in kpis %}
+    {% if sk.kpi.category == 'lag' %}
+    <div class="card p-5">
+        <div class="flex items-center justify-between mb-2">
+            <div>
+                <h3 class="text-base font-semibold text-white">{{ sk.kpi.name }}</h3>
+                <p class="text-xs text-slate-500">{{ sk.kpi.description }}</p>
+            </div>
+            {% if sk.score %}
+            <span class="px-3 py-1 rounded-full text-sm font-bold score-{{ sk.score.score }}">{{ sk.score.score|upper }}</span>
+            {% else %}
+            <span class="px-3 py-1 rounded-full text-sm font-bold score-na">NOT SCORED</span>
+            {% endif %}
+        </div>
+        <div class="flex gap-4 text-xs text-slate-500 mb-3">
+            <span><span class="text-emerald-500">G:</span> {{ sk.kpi.green_threshold }}</span>
+            <span><span class="text-amber-500">Y:</span> {{ sk.kpi.yellow_threshold }}</span>
+            <span><span class="text-red-500">R:</span> {{ sk.kpi.red_threshold }}</span>
+        </div>
+        {% if sk.score and sk.score.notes %}
+        <p class="text-sm text-slate-400 mb-3">{{ sk.score.notes }}</p>
+        {% endif %}
+        {% if sk.history %}
+        <div class="flex items-center gap-1.5">
+            <span class="text-xs text-slate-600 mr-2">History:</span>
+            {% for h in sk.history %}
+            <div class="w-5 h-5 rounded dot-{{ h.score }} flex items-center justify-center" title="{{ h.period_start }}: {{ h.score|upper }}">
+                <span class="text-[8px] font-bold text-white/80">{{ h.period_start[5:7] }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Development Goals -->
+<div class="card p-5 mb-8">
+    <h2 class="text-xs uppercase tracking-wider text-slate-500 mb-4">Development Goals</h2>
+    {% for g in goals %}
+    <div class="py-4 border-b border-slate-800 last:border-0">
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-semibold text-white">{{ g.title }}</h3>
+            <span class="text-xs px-2 py-0.5 rounded
+                {% if g.status == 'completed' %}bg-emerald-900/50 text-emerald-400
+                {% elif g.status == 'in_progress' %}bg-blue-900/50 text-blue-400
+                {% elif g.status == 'overdue' %}bg-red-900/50 text-red-400
+                {% else %}bg-slate-700 text-slate-400{% endif %}">{{ g.status|replace('_', ' ')|upper }}</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-2">{{ g.description }} | Target: {{ g.target_date }}</p>
+        <div class="flex items-center gap-3">
+            <div class="progress-bar flex-1 h-2">
+                <div class="progress-fill {% if g.status == 'completed' %}bg-emerald-500{% elif g.status == 'in_progress' %}bg-blue-500{% elif g.status == 'overdue' %}bg-red-500{% else %}bg-slate-600{% endif %}" style="width: {{ g.progress }}%"></div>
+            </div>
+            <span class="text-sm font-medium text-slate-400">{{ g.progress }}%</span>
+        </div>
+
+        <!-- Quick update form -->
+        <form method="POST" action="/goals/{{ g.id }}/update" class="flex items-center gap-2 mt-3">
+            <select name="status" class="text-xs rounded-lg px-2 py-1.5">
+                {% for s in ['not_started', 'in_progress', 'completed', 'overdue', 'cancelled'] %}
+                <option value="{{ s }}" {% if g.status == s %}selected{% endif %}>{{ s|replace('_', ' ')|title }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="progress" value="{{ g.progress }}" min="0" max="100" class="text-xs rounded-lg px-2 py-1.5 w-16">
+            <span class="text-xs text-slate-600">%</span>
+            <input type="text" name="outcome" value="{{ g.outcome or '' }}" placeholder="Outcome notes..." class="flex-1 text-xs rounded-lg px-2 py-1.5">
+            <button type="submit" class="text-xs px-3 py-1.5 bg-slate-600 hover:bg-slate-500 text-white rounded-lg">Update</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Reviews -->
+{% if reviews %}
+<div class="card p-5">
+    <h2 class="text-xs uppercase tracking-wider text-slate-500 mb-4">Review History</h2>
+    {% for r in reviews %}
+    <div class="py-4 border-b border-slate-800 last:border-0">
+        <div class="flex items-center justify-between mb-2">
+            <div>
+                <span class="text-sm font-semibold text-white">{{ r.review_type|title }} Review — {{ r.period_label }}</span>
+                {% if r.overall_grade %}
+                <span class="ml-2 text-sm font-bold {% if r.overall_grade in ['A', 'A+', 'A-', 'B+', 'B'] %}text-emerald-400{% elif r.overall_grade in ['B-', 'C+', 'C'] %}text-amber-400{% else %}text-red-400{% endif %}">{{ r.overall_grade }}</span>
+                {% endif %}
+            </div>
+            <span class="text-xs text-slate-600">{{ r.created_at[:10] }}</span>
+        </div>
+        {% if r.summary %}<p class="text-sm text-slate-300 mb-1">{{ r.summary }}</p>{% endif %}
+        {% if r.strengths %}<p class="text-xs text-emerald-400/70"><strong>Strengths:</strong> {{ r.strengths }}</p>{% endif %}
+        {% if r.concerns %}<p class="text-xs text-amber-400/70"><strong>Concerns:</strong> {{ r.concerns }}</p>{% endif %}
+        {% if r.action_items %}<p class="text-xs text-blue-400/70"><strong>Actions:</strong> {{ r.action_items }}</p>{% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

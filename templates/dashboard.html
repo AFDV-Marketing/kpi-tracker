@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- WIG Banner -->
+{% if wig %}
+<div class="card mb-8 p-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-xs uppercase tracking-wider text-slate-500 mb-1">Q2 Wildly Important Goal</p>
+            <h2 class="text-2xl font-bold text-white">{{ wig.title }}</h2>
+            <p class="text-slate-400 mt-1">{{ wig.metric_from }} &rarr; {{ wig.metric_to }} by {{ wig.target_date }}</p>
+        </div>
+        <div class="text-right">
+            <p class="text-xs text-slate-500">Target</p>
+            <p class="text-3xl font-bold text-emerald-400">{{ wig.metric_to }}</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Period Info -->
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-lg font-semibold text-white">Team Scorecards</h1>
+        <p class="text-sm text-slate-500">Week: {{ week_start }} to {{ week_end }} | Month: {{ month_label }}</p>
+    </div>
+</div>
+
+<!-- Scorecards Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+{% for sc in scorecards %}
+<div class="card">
+    <!-- Header -->
+    <div class="card-header p-5 flex items-center justify-between">
+        <div>
+            <h3 class="text-lg font-bold text-white">{{ sc.staff.name }}</h3>
+            <p class="text-sm text-slate-400">{{ sc.staff.role }}</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <!-- Summary dots -->
+            <div class="flex items-center gap-1.5">
+                {% if sc.summary.green %}<span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full dot-green"></span><span class="text-xs text-emerald-400 font-medium">{{ sc.summary.green }}</span></span>{% endif %}
+                {% if sc.summary.yellow %}<span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full dot-yellow"></span><span class="text-xs text-amber-400 font-medium">{{ sc.summary.yellow }}</span></span>{% endif %}
+                {% if sc.summary.red %}<span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full dot-red"></span><span class="text-xs text-red-400 font-medium">{{ sc.summary.red }}</span></span>{% endif %}
+                {% if sc.summary.unscored %}<span class="inline-flex items-center gap-1"><span class="w-3 h-3 rounded-full dot-na"></span><span class="text-xs text-slate-500 font-medium">{{ sc.summary.unscored }}</span></span>{% endif %}
+            </div>
+            <span class="text-slate-600">|</span>
+            <span class="text-sm font-medium text-slate-400">${{ "%.0f"|format(sc.staff.rate) }}/hr</span>
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="p-5">
+        <p class="text-xs uppercase tracking-wider text-slate-500 mb-3">Lead Measures (Weekly)</p>
+        {% for sk in sc.kpis %}
+        {% if sk.kpi.category == 'lead' %}
+        <div class="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
+            <span class="text-sm text-slate-300">{{ sk.kpi.name }}</span>
+            {% if sk.score %}
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium score-{{ sk.score.score }}">{{ sk.score.score|upper }}</span>
+            {% else %}
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium score-na">NOT SCORED</span>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        <p class="text-xs uppercase tracking-wider text-slate-500 mb-3 mt-5">Lag Measures (Monthly)</p>
+        {% for sk in sc.kpis %}
+        {% if sk.kpi.category == 'lag' %}
+        <div class="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
+            <span class="text-sm text-slate-300">{{ sk.kpi.name }}</span>
+            {% if sk.score %}
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium score-{{ sk.score.score }}">{{ sk.score.score|upper }}</span>
+            {% else %}
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium score-na">NOT SCORED</span>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        <!-- Goals Summary -->
+        <p class="text-xs uppercase tracking-wider text-slate-500 mb-3 mt-5">Development Goals</p>
+        {% for g in sc.goals %}
+        <div class="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
+            <div class="flex-1 mr-4">
+                <span class="text-sm text-slate-300">{{ g.title }}</span>
+                <span class="text-xs text-slate-600 ml-2">by {{ g.target_date }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="progress-bar w-16 h-1.5">
+                    <div class="progress-fill {% if g.status == 'completed' %}bg-emerald-500{% elif g.status == 'in_progress' %}bg-blue-500{% elif g.status == 'overdue' %}bg-red-500{% else %}bg-slate-600{% endif %}" style="width: {{ g.progress }}%"></div>
+                </div>
+                <span class="text-xs text-slate-500">{{ g.progress }}%</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Actions -->
+    <div class="card-header p-4 flex items-center gap-3 border-t border-slate-700">
+        <a href="/log/{{ sc.staff.id }}?period=weekly" class="text-xs px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg no-underline font-medium">Log Weekly</a>
+        <a href="/log/{{ sc.staff.id }}?period=monthly" class="text-xs px-3 py-1.5 bg-slate-600 hover:bg-slate-500 text-white rounded-lg no-underline font-medium">Log Monthly</a>
+        <a href="/scorecard/{{ sc.staff.id }}" class="text-xs px-3 py-1.5 text-slate-400 hover:text-white no-underline font-medium">Full Scorecard &rarr;</a>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+<!-- Recent Reviews -->
+{% if recent_reviews %}
+<div class="card p-5">
+    <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Recent Reviews</h3>
+    {% for r in recent_reviews %}
+    <div class="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
+        <div>
+            <span class="text-sm text-white font-medium">{{ r.staff_name }}</span>
+            <span class="text-xs text-slate-500 ml-2">{{ r.review_type }} — {{ r.period_label }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+            {% if r.overall_grade %}
+            <span class="text-sm font-bold {% if r.overall_grade in ['A', 'A+', 'A-', 'B+', 'B'] %}text-emerald-400{% elif r.overall_grade in ['B-', 'C+', 'C'] %}text-amber-400{% else %}text-red-400{% endif %}">{{ r.overall_grade }}</span>
+            {% endif %}
+            <span class="text-xs text-slate-600">{{ r.created_at[:10] }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
