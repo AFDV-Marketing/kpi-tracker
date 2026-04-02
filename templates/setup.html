@@ -1,263 +1,239 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AFDV AI Setup Guide</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #0f172a; color: #e2e8f0; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; }
-        .step-done { opacity: 0.5; }
-        .copy-btn { transition: all 0.2s; }
-        .copy-btn:hover { background: #3b82f6; }
-        .copy-btn.copied { background: #059669 !important; }
-        code { background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 2px 6px; font-size: 0.85em; }
-        pre { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; overflow-x: auto; position: relative; }
-        .os-btn { transition: all 0.2s; }
-        .os-btn.active { background: #3b82f6; border-color: #60a5fa; }
-        .tool-btn.active { background: #7c3aed; border-color: #a78bfa; }
-    </style>
-</head>
-<body class="h-full">
-    <nav class="border-b border-slate-700 px-6 py-4">
-        <div class="max-w-3xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="text-xl font-bold text-white">AFDV AI</span>
-                <span class="text-slate-500">Setup Guide</span>
-            </div>
-            <a href="/" class="text-sm text-slate-400 hover:text-white">Dashboard</a>
-        </div>
-    </nav>
+{% extends "base.html" %}
+{% block title %}Setup{% endblock %}
+{% block nav_setup %}active{% endblock %}
 
-    <main class="max-w-3xl mx-auto px-6 py-10">
-        <!-- Welcome -->
-        <div class="text-center mb-10">
-            <h1 class="text-3xl font-bold text-white mb-3">Welcome to AFDV AI</h1>
-            <p class="text-slate-400 text-lg">Get connected to the gateway in under 5 minutes.</p>
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <!-- Hero -->
+    <div class="text-center mb-12 pt-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium mb-4">
+            3,000+ AI tools at your fingertips
         </div>
+        <h1 class="text-4xl font-bold text-white mb-3">Get Your <span class="gradient-text">Superpowers</span></h1>
+        <p class="text-slate-400 text-lg">Connect to the AFDV AI Gateway in under 5 minutes.</p>
+    </div>
 
-        <!-- Step 1: Who are you -->
-        <div class="card p-6 mb-6" id="step1">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold">1</span>
-                <h2 class="text-lg font-semibold text-white">Who are you?</h2>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="selectUser('mariam')" class="user-btn card p-4 text-left hover:border-blue-500 transition" data-user="mariam">
-                    <p class="font-semibold text-white">Mariam G.</p>
-                    <p class="text-xs text-slate-500">Account Manager</p>
-                </button>
-                <button onclick="selectUser('alioune')" class="user-btn card p-4 text-left hover:border-blue-500 transition" data-user="alioune">
-                    <p class="font-semibold text-white">Alioune F.</p>
-                    <p class="text-xs text-slate-500">CEO</p>
-                </button>
-            </div>
+    <!-- Step 1: Who are you -->
+    <div class="glass p-6 mb-4 fade-in" id="step1">
+        <div class="flex items-center gap-3 mb-5">
+            <span class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-sm font-bold text-black">1</span>
+            <h2 class="text-base font-semibold text-white">Who are you?</h2>
         </div>
-
-        <!-- Step 2: What's your OS -->
-        <div class="card p-6 mb-6 hidden" id="step2">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold">2</span>
-                <h2 class="text-lg font-semibold text-white">What's your operating system?</h2>
-            </div>
-            <div class="grid grid-cols-3 gap-3">
-                <button onclick="selectOS('mac')" class="os-btn card p-4 text-center hover:border-blue-500 transition">
-                    <p class="text-2xl mb-1">&#63743;</p>
-                    <p class="font-semibold text-white text-sm">macOS</p>
-                </button>
-                <button onclick="selectOS('windows')" class="os-btn card p-4 text-center hover:border-blue-500 transition">
-                    <p class="text-2xl mb-1">&#8862;</p>
-                    <p class="font-semibold text-white text-sm">Windows</p>
-                </button>
-                <button onclick="selectOS('linux')" class="os-btn card p-4 text-center hover:border-blue-500 transition">
-                    <p class="text-2xl mb-1">&#9654;</p>
-                    <p class="font-semibold text-white text-sm">Linux</p>
-                </button>
-            </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="selectUser('mariam')" class="user-btn glass p-5 text-left hover:border-amber-500/40 transition cursor-pointer group" data-user="mariam">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm mb-3">MG</div>
+                <p class="font-semibold text-white group-hover:text-amber-400 transition">Mariam G.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Account Manager</p>
+            </button>
+            <button onclick="selectUser('alioune')" class="user-btn glass p-5 text-left hover:border-amber-500/40 transition cursor-pointer group" data-user="alioune">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-black font-bold text-sm mb-3">AF</div>
+                <p class="font-semibold text-white group-hover:text-amber-400 transition">Alioune F.</p>
+                <p class="text-xs text-slate-500 mt-0.5">CEO</p>
+            </button>
         </div>
+    </div>
 
-        <!-- Step 3: Choose your tool -->
-        <div class="card p-6 mb-6 hidden" id="step3">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-bold">3</span>
-                <h2 class="text-lg font-semibold text-white">Which AI tool do you want to use?</h2>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="selectTool('claude')" class="tool-btn card p-4 text-left hover:border-purple-500 transition">
-                    <p class="font-semibold text-white">Claude Code</p>
-                    <p class="text-xs text-slate-500">by Anthropic — recommended</p>
-                </button>
-                <button onclick="selectTool('gemini')" class="tool-btn card p-4 text-left hover:border-purple-500 transition">
-                    <p class="font-semibold text-white">Gemini CLI</p>
-                    <p class="text-xs text-slate-500">by Google</p>
-                </button>
-            </div>
+    <!-- Step 2: What's your OS -->
+    <div class="glass p-6 mb-4 hidden fade-in" id="step2">
+        <div class="flex items-center gap-3 mb-5">
+            <span class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-sm font-bold text-black">2</span>
+            <h2 class="text-base font-semibold text-white">What's your system?</h2>
         </div>
-
-        <!-- Step 4: Install -->
-        <div class="card p-6 mb-6 hidden" id="step4">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-sm font-bold">4</span>
-                <h2 class="text-lg font-semibold text-white">Install <span id="toolName"></span></h2>
-            </div>
-            <p class="text-sm text-slate-400 mb-4">Open your terminal and run:</p>
-            <div class="relative">
-                <pre><code id="installCmd" class="text-emerald-400 text-sm"></code></pre>
-                <button onclick="copyText('installCmd')" class="copy-btn absolute top-3 right-3 px-3 py-1 bg-slate-700 rounded text-xs text-slate-300 hover:text-white">Copy</button>
-            </div>
-            <p class="text-xs text-slate-500 mt-3" id="installNote"></p>
+        <div class="grid grid-cols-3 gap-3">
+            <button onclick="selectOS('mac')" class="os-btn glass p-5 text-center hover:border-amber-500/40 transition cursor-pointer">
+                <div class="text-3xl mb-2 opacity-60">&#127823;</div>
+                <p class="font-medium text-white text-sm">macOS</p>
+            </button>
+            <button onclick="selectOS('windows')" class="os-btn glass p-5 text-center hover:border-amber-500/40 transition cursor-pointer">
+                <div class="text-3xl mb-2 opacity-60">&#128187;</div>
+                <p class="font-medium text-white text-sm">Windows</p>
+            </button>
+            <button onclick="selectOS('linux')" class="os-btn glass p-5 text-center hover:border-amber-500/40 transition cursor-pointer">
+                <div class="text-3xl mb-2 opacity-60">&#128039;</div>
+                <p class="font-medium text-white text-sm">Linux</p>
+            </button>
         </div>
+    </div>
 
-        <!-- Step 5: Connect to Gateway -->
-        <div class="card p-6 mb-6 hidden" id="step5">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-sm font-bold">5</span>
-                <h2 class="text-lg font-semibold text-white">Connect to the AFDV Gateway</h2>
-            </div>
-            <p class="text-sm text-slate-400 mb-4">This gives you access to 3,000+ tools including CRM, email, social media, analytics, and more. Run this in your terminal:</p>
-            <div class="relative">
-                <pre><code id="mcpCmd" class="text-emerald-400 text-sm break-all whitespace-pre-wrap"></code></pre>
-                <button onclick="copyText('mcpCmd')" class="copy-btn absolute top-3 right-3 px-3 py-1 bg-slate-700 rounded text-xs text-slate-300 hover:text-white">Copy</button>
-            </div>
-            <div class="mt-4 p-3 rounded-lg bg-amber-900/20 border border-amber-800/50">
-                <p class="text-xs text-amber-400"><strong>Your token is personal.</strong> Don't share it with anyone. It's tied to your identity and all tool calls are audited.</p>
-            </div>
+    <!-- Step 3: Choose your tool -->
+    <div class="glass p-6 mb-4 hidden fade-in" id="step3">
+        <div class="flex items-center gap-3 mb-5">
+            <span class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-sm font-bold text-black">3</span>
+            <h2 class="text-base font-semibold text-white">Choose your AI assistant</h2>
         </div>
-
-        <!-- Step 6: Test -->
-        <div class="card p-6 mb-6 hidden" id="step6">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-sm font-bold">6</span>
-                <h2 class="text-lg font-semibold text-white">Test the Connection</h2>
-            </div>
-            <p class="text-sm text-slate-400 mb-4">Open <span id="toolNameTest"></span> and try asking:</p>
-            <div class="relative">
-                <pre><code id="testPrompt" class="text-blue-400 text-sm">Search for tools related to "social media posting"</code></pre>
-                <button onclick="copyText('testPrompt')" class="copy-btn absolute top-3 right-3 px-3 py-1 bg-slate-700 rounded text-xs text-slate-300 hover:text-white">Copy</button>
-            </div>
-            <p class="text-sm text-slate-400 mt-4">If you see a list of tools come back, you're connected! If you get an error, message Ali on Google Chat.</p>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="selectTool('claude')" class="tool-btn glass p-5 text-left hover:border-purple-500/40 transition cursor-pointer group">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-xs">C</div>
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">recommended</span>
+                </div>
+                <p class="font-semibold text-white group-hover:text-purple-400 transition">Claude Code</p>
+                <p class="text-xs text-slate-500 mt-0.5">by Anthropic</p>
+            </button>
+            <button onclick="selectTool('gemini')" class="tool-btn glass p-5 text-left hover:border-blue-500/40 transition cursor-pointer group">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-bold text-xs">G</div>
+                </div>
+                <p class="font-semibold text-white group-hover:text-blue-400 transition">Gemini CLI</p>
+                <p class="text-xs text-slate-500 mt-0.5">by Google</p>
+            </button>
         </div>
+    </div>
 
-        <!-- Done -->
-        <div class="text-center py-8 hidden" id="done">
-            <p class="text-2xl mb-2">You're all set!</p>
-            <p class="text-slate-400">The gateway gives you access to tools for every client and every workflow. Ask your AI assistant to <code>search for tools</code> whenever you need something.</p>
-            <div class="mt-6 flex gap-3 justify-center">
-                <a href="https://docs.google.com/document/d/1r0Os07IQ-wCZeXghRDT-Uf8CpR0cYVlXvLxiS4HOmTc/" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm text-white no-underline">Quick Start Guide</a>
-                <a href="https://chat.google.com" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm text-white no-underline">Ask Ali on Chat</a>
-            </div>
+    <!-- Step 4: Install -->
+    <div class="glass p-6 mb-4 hidden fade-in" id="step4">
+        <div class="flex items-center gap-3 mb-5">
+            <span class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-sm font-bold text-black">4</span>
+            <h2 class="text-base font-semibold text-white">Install <span id="toolName" class="gradient-text"></span></h2>
         </div>
-    </main>
+        <p class="text-sm text-slate-400 mb-4">Open your terminal and paste this:</p>
+        <div class="relative group">
+            <pre class="bg-black/40 border border-white/5 rounded-xl p-4 overflow-x-auto"><code id="installCmd" class="text-emerald-400 text-sm font-mono"></code></pre>
+            <button onclick="copyText('installCmd')" class="copy-btn absolute top-3 right-3 px-3 py-1.5 bg-white/5 hover:bg-amber-500/20 rounded-lg text-xs text-slate-400 hover:text-amber-400 transition opacity-0 group-hover:opacity-100">Copy</button>
+        </div>
+        <p class="text-xs text-slate-600 mt-3" id="installNote"></p>
+    </div>
 
-    <script>
-        const tokens = {
-            mariam: {
-                id: "e3aefd9d844c81615ffaee0f03a866b2.access",
-                secret: "0ef799604ce67b023801dd736eb9018bb89307ee0b31022a5e95b8e643127053"
+    <!-- Step 5: Connect to Gateway -->
+    <div class="glass p-6 mb-4 hidden fade-in glow-gold" id="step5">
+        <div class="flex items-center gap-3 mb-5">
+            <span class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-sm font-bold text-black">5</span>
+            <h2 class="text-base font-semibold text-white">Connect to the <span class="gradient-text">AFDV Gateway</span></h2>
+        </div>
+        <p class="text-sm text-slate-400 mb-4">This is the magic command. It connects you to 3,000+ tools — CRM, email, social media, analytics, SEO, deployment, and more.</p>
+        <div class="relative group">
+            <pre class="bg-black/40 border border-amber-500/10 rounded-xl p-4 overflow-x-auto"><code id="mcpCmd" class="text-amber-400 text-sm font-mono break-all whitespace-pre-wrap"></code></pre>
+            <button onclick="copyText('mcpCmd')" class="copy-btn absolute top-3 right-3 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 rounded-lg text-xs text-amber-400 transition opacity-0 group-hover:opacity-100">Copy</button>
+        </div>
+        <div class="mt-4 p-3 rounded-xl bg-red-500/5 border border-red-500/10">
+            <p class="text-xs text-red-400/80"><strong>Your token is personal and secret.</strong> Don't share it. Every tool call is logged to your identity.</p>
+        </div>
+    </div>
+
+    <!-- Step 6: Test -->
+    <div class="glass p-6 mb-4 hidden fade-in" id="step6">
+        <div class="flex items-center gap-3 mb-5">
+            <span class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-sm font-bold text-black">6</span>
+            <h2 class="text-base font-semibold text-white">Test it</h2>
+        </div>
+        <p class="text-sm text-slate-400 mb-4">Open <span id="toolNameTest" class="text-white font-medium"></span> in your terminal and try:</p>
+        <div class="relative group">
+            <pre class="bg-black/40 border border-white/5 rounded-xl p-4"><code id="testPrompt" class="text-blue-400 text-sm font-mono">Search for tools related to "social media posting"</code></pre>
+            <button onclick="copyText('testPrompt')" class="copy-btn absolute top-3 right-3 px-3 py-1.5 bg-white/5 hover:bg-blue-500/20 rounded-lg text-xs text-slate-400 hover:text-blue-400 transition opacity-0 group-hover:opacity-100">Copy</button>
+        </div>
+        <p class="text-sm text-slate-500 mt-4">If you see tools come back — <span class="text-emerald-400 font-medium">you're in.</span> If not, message Ali on Google Chat.</p>
+    </div>
+
+    <!-- Done -->
+    <div class="text-center py-12 hidden fade-in" id="done">
+        <div class="text-5xl mb-4">&#9889;</div>
+        <h2 class="text-2xl font-bold text-white mb-2">You have <span class="gradient-text">superpowers</span> now.</h2>
+        <p class="text-slate-400 max-w-md mx-auto">Ask your AI assistant to <code class="text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">search for tools</code> whenever you need something. There are 3,000+ to choose from.</p>
+        <div class="mt-8 flex gap-3 justify-center">
+            <a href="https://chat.google.com" class="btn-primary text-sm no-underline">Message Ali on Chat</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tokens = {
+        mariam: {
+            id: "e3aefd9d844c81615ffaee0f03a866b2.access",
+            secret: "0ef799604ce67b023801dd736eb9018bb89307ee0b31022a5e95b8e643127053"
+        },
+        alioune: { id: "local", secret: "local" }
+    };
+
+    let selectedUser = null, selectedOS = null, selectedTool = null;
+
+    function selectUser(user) {
+        selectedUser = user;
+        document.querySelectorAll('.user-btn').forEach(b => { b.style.borderColor = 'rgba(255,255,255,0.06)'; b.querySelector('div:first-child').style.transform = ''; });
+        const btn = document.querySelector(`[data-user="${user}"]`);
+        btn.style.borderColor = 'rgba(250, 204, 21, 0.4)';
+        btn.querySelector('div:first-child').style.transform = 'scale(1.1)';
+        show('step2');
+        detectOS();
+    }
+
+    function detectOS() {
+        const ua = navigator.userAgent.toLowerCase();
+        if (ua.includes('mac')) { document.querySelectorAll('.os-btn')[0].click(); }
+        else if (ua.includes('win')) { document.querySelectorAll('.os-btn')[1].click(); }
+        else if (ua.includes('linux')) { document.querySelectorAll('.os-btn')[2].click(); }
+    }
+
+    function selectOS(os) {
+        selectedOS = os;
+        document.querySelectorAll('.os-btn').forEach(b => b.style.borderColor = 'rgba(255,255,255,0.06)');
+        if (event && event.target) {
+            const btn = event.target.closest('.os-btn');
+            if (btn) btn.style.borderColor = 'rgba(250, 204, 21, 0.4)';
+        }
+        show('step3');
+    }
+
+    function selectTool(tool) {
+        selectedTool = tool;
+        document.querySelectorAll('.tool-btn').forEach(b => b.style.borderColor = 'rgba(255,255,255,0.06)');
+        if (event && event.target) {
+            const btn = event.target.closest('.tool-btn');
+            if (btn) btn.style.borderColor = tool === 'claude' ? 'rgba(168,85,247,0.4)' : 'rgba(59,130,246,0.4)';
+        }
+        renderInstall();
+        renderMCP();
+        show('step4'); show('step5'); show('step6'); show('done');
+    }
+
+    function renderInstall() {
+        const cmds = {
+            claude: {
+                mac: 'brew install claude-code\n\n# Or if you don\'t have Homebrew:\nnpm install -g @anthropic-ai/claude-code',
+                windows: 'npm install -g @anthropic-ai/claude-code',
+                linux: 'npm install -g @anthropic-ai/claude-code'
             },
-            alioune: {
-                id: "local",
-                secret: "local"
-            }
+            gemini: { mac: 'npm install -g @anthropic-ai/claude-code', windows: 'npm install -g @google/gemini-cli', linux: 'npm install -g @google/gemini-cli' }
         };
+        const notes = {
+            claude: 'Requires Node.js 18+. Get it from nodejs.org if needed. After install, type "claude" to start.',
+            gemini: 'Requires Node.js 18+. Get it from nodejs.org if needed. After install, type "gemini" to start.'
+        };
+        document.getElementById('toolName').textContent = selectedTool === 'claude' ? 'Claude Code' : 'Gemini CLI';
+        document.getElementById('toolNameTest').textContent = selectedTool === 'claude' ? 'Claude Code' : 'Gemini CLI';
+        document.getElementById('installCmd').textContent = cmds[selectedTool][selectedOS];
+        document.getElementById('installNote').textContent = notes[selectedTool];
+    }
 
-        let selectedUser = null;
-        let selectedOS = null;
-        let selectedTool = null;
-
-        function selectUser(user) {
-            selectedUser = user;
-            document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('border-blue-500'));
-            document.querySelector(`[data-user="${user}"]`).classList.add('border-blue-500');
-            show('step2');
-            detectOS();
+    function renderMCP() {
+        const t = tokens[selectedUser];
+        let cmd = '';
+        if (selectedTool === 'claude') {
+            cmd = selectedUser === 'alioune'
+                ? 'claude mcp add afdv-gateway --transport http \\\n  --url http://127.0.0.1:8100/mcp'
+                : `claude mcp add afdv-gateway --transport http \\\n  --url https://gateway.afdvprojects.com/mcp \\\n  --header "CF-Access-Client-Id: ${t.id}" \\\n  --header "CF-Access-Client-Secret: ${t.secret}"`;
+        } else {
+            cmd = selectedUser === 'alioune'
+                ? '# Add to .gemini/settings.json:\n{\n  "mcpServers": {\n    "afdv-gateway": {\n      "url": "http://127.0.0.1:8100/mcp"\n    }\n  }\n}'
+                : `# Add to .gemini/settings.json:\n{\n  "mcpServers": {\n    "afdv-gateway": {\n      "url": "https://gateway.afdvprojects.com/mcp",\n      "headers": {\n        "CF-Access-Client-Id": "${t.id}",\n        "CF-Access-Client-Secret": "${t.secret}"\n      }\n    }\n  }\n}`;
         }
+        document.getElementById('mcpCmd').textContent = cmd;
+    }
 
-        function detectOS() {
-            const ua = navigator.userAgent.toLowerCase();
-            if (ua.includes('mac')) selectOS('mac');
-            else if (ua.includes('win')) selectOS('windows');
-            else if (ua.includes('linux')) selectOS('linux');
-        }
+    function show(id) {
+        const el = document.getElementById(id);
+        el.classList.remove('hidden');
+        el.classList.add('fade-in');
+    }
 
-        function selectOS(os) {
-            selectedOS = os;
-            document.querySelectorAll('.os-btn').forEach(b => b.classList.remove('active'));
-            event.target.closest('.os-btn')?.classList.add('active');
-            show('step3');
-        }
-
-        function selectTool(tool) {
-            selectedTool = tool;
-            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            event.target.closest('.tool-btn')?.classList.add('active');
-            renderInstall();
-            renderMCP();
-            show('step4');
-            show('step5');
-            show('step6');
-            show('done');
-        }
-
-        function renderInstall() {
-            const cmds = {
-                claude: {
-                    mac: 'brew install claude-code\n\n# Or via npm:\nnpm install -g @anthropic-ai/claude-code',
-                    windows: 'npm install -g @anthropic-ai/claude-code\n\n# Then open a new terminal and type:\nclaude',
-                    linux: 'npm install -g @anthropic-ai/claude-code\n\n# Or via curl:\ncurl -fsSL https://claude.ai/install.sh | sh'
-                },
-                gemini: {
-                    mac: 'npm install -g @anthropic-ai/claude-code\n\n# Gemini CLI:\nnpm install -g @anthropic-ai/claude-code',
-                    windows: 'npm install -g @google/gemini-cli',
-                    linux: 'npm install -g @google/gemini-cli'
-                }
-            };
-
-            const notes = {
-                claude: 'You\'ll need Node.js 18+ installed. Get it from nodejs.org if you don\'t have it. After install, type "claude" in your terminal to start.',
-                gemini: 'You\'ll need Node.js 18+ installed. Get it from nodejs.org if you don\'t have it. After install, type "gemini" in your terminal to start.'
-            };
-
-            document.getElementById('toolName').textContent = selectedTool === 'claude' ? 'Claude Code' : 'Gemini CLI';
-            document.getElementById('toolNameTest').textContent = selectedTool === 'claude' ? 'Claude Code' : 'Gemini CLI';
-            document.getElementById('installCmd').textContent = cmds[selectedTool][selectedOS];
-            document.getElementById('installNote').textContent = notes[selectedTool];
-        }
-
-        function renderMCP() {
-            const t = tokens[selectedUser];
-            let cmd = '';
-
-            if (selectedTool === 'claude') {
-                if (selectedUser === 'alioune') {
-                    cmd = '# Alioune: gateway runs locally\nclaude mcp add afdv-gateway --transport http --url http://127.0.0.1:8100/mcp';
-                } else {
-                    cmd = `claude mcp add afdv-gateway --transport http --url https://gateway.afdvprojects.com/mcp --header "CF-Access-Client-Id: ${t.id}" --header "CF-Access-Client-Secret: ${t.secret}"`;
-                }
-            } else {
-                if (selectedUser === 'alioune') {
-                    cmd = '# Add to your .gemini/settings.json:\n{\n  "mcpServers": {\n    "afdv-gateway": {\n      "url": "http://127.0.0.1:8100/mcp"\n    }\n  }\n}';
-                } else {
-                    cmd = `# Add to your .gemini/settings.json:\n{\n  "mcpServers": {\n    "afdv-gateway": {\n      "url": "https://gateway.afdvprojects.com/mcp",\n      "headers": {\n        "CF-Access-Client-Id": "${t.id}",\n        "CF-Access-Client-Secret": "${t.secret}"\n      }\n    }\n  }\n}`;
-                }
-            }
-
-            document.getElementById('mcpCmd').textContent = cmd;
-        }
-
-        function show(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function copyText(id) {
-            const text = document.getElementById(id).textContent;
-            navigator.clipboard.writeText(text);
-            const btn = document.getElementById(id).parentElement.querySelector('.copy-btn');
-            btn.textContent = 'Copied!';
-            btn.classList.add('copied');
-            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-        }
-    </script>
-</body>
-</html>
+    function copyText(id) {
+        const text = document.getElementById(id).textContent;
+        navigator.clipboard.writeText(text);
+        const btn = document.getElementById(id).parentElement.querySelector('.copy-btn');
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.color = '#10b981';
+        btn.style.opacity = '1';
+        setTimeout(() => { btn.textContent = orig; btn.style.color = ''; btn.style.opacity = ''; }, 2000);
+    }
+</script>
+{% endblock %}
