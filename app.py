@@ -272,6 +272,12 @@ async def api_scorecards():
     return result
 
 
+# ── Setup / Onboarding ─────────────────────────────────────
+@app.get("/setup", response_class=HTMLResponse)
+async def setup_page(request: Request):
+    return templates.TemplateResponse(request, "setup.html", {})
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8300)
