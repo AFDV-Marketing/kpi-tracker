@@ -38,8 +38,14 @@ def get_month_range(d=None):
     return first.isoformat(), last.isoformat()
 
 
-# ── Dashboard ──────────────────────────────────────────────
+# ── Root redirect ──────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return RedirectResponse("/setup", status_code=303)
+
+
+# ── Dashboard (CEO only — hidden from nav) ─────────────────
+@app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     db = get_db()
     staff = db.execute("SELECT * FROM staff WHERE active=1").fetchall()
