@@ -97,6 +97,11 @@
             <button onclick="copyText('installCmd')" class="copy-btn absolute top-3 right-3 px-3 py-1.5 bg-white/5 hover:bg-amber-500/20 rounded-lg text-xs text-slate-400 hover:text-amber-400 transition opacity-0 group-hover:opacity-100">Copy</button>
         </div>
         <p class="text-xs text-slate-600 mt-3" id="installNote"></p>
+        <div class="mt-4 hidden" id="claudeReferral">
+            <a href="https://claude.ai/referral/S2gv9hs0LQ" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/20 text-orange-400 text-sm font-medium hover:border-orange-500/40 transition no-underline">
+                Get a free Claude Pro guest pass &rarr;
+            </a>
+        </div>
     </div>
 
     <!-- Step 5: Connect to Gateway -->
@@ -211,6 +216,7 @@
         document.getElementById('toolNameTest').textContent = selectedTool === 'claude' ? 'Claude Code' : 'Gemini CLI';
         document.getElementById('installCmd').textContent = cmds[selectedTool][selectedOS];
         document.getElementById('installNote').textContent = notes[selectedTool];
+        document.getElementById('claudeReferral').classList.toggle('hidden', selectedTool !== 'claude');
     }
 
     function renderMCP() {
